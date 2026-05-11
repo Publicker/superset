@@ -1880,6 +1880,15 @@ def get_time_filter_status(
 
 
 def format_list(items: Sequence[str], sep: str = ", ", quote: str = '"') -> str:
+    """Join ``items`` into a quoted, separated string.
+
+    Raises ``ValueError`` if ``items`` is empty, since an empty result would
+    produce confusing user-facing messages (e.g. ``"Columns not found: "``).
+    Callers should guard against empty input and provide context-appropriate
+    messaging upstream.
+    """
+    if not items:
+        raise ValueError("format_list() requires a non-empty sequence of items")
     quote_escaped = "\\" + quote
     return sep.join(f"{quote}{x.replace(quote, quote_escaped)}{quote}" for x in items)
 

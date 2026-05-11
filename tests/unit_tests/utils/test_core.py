@@ -32,6 +32,7 @@ from superset.utils.core import (
     check_is_safe_zip,
     DateColumn,
     FilterOperator,
+    format_list,
     generic_find_constraint_name,
     generic_find_fk_constraint_name,
     get_datasource_full_name,
@@ -1730,3 +1731,29 @@ def test_markdown_with_markup_wrap() -> None:
 
     assert isinstance(result, Markup)
     assert "<strong>bold</strong>" in str(result)
+
+
+def test_format_list_basic() -> None:
+    assert format_list(["a", "b", "c"]) == '"a", "b", "c"'
+
+
+def test_format_list_single_item() -> None:
+    assert format_list(["only"]) == '"only"'
+
+
+def test_format_list_custom_sep_and_quote() -> None:
+    assert format_list(["a", "b"], sep=" | ", quote="'") == "'a' | 'b'"
+
+
+def test_format_list_escapes_embedded_quotes() -> None:
+    assert format_list(['he said "hi"']) == '"he said \\"hi\\""'
+
+
+def test_format_list_raises_on_empty_list() -> None:
+    with pytest.raises(ValueError, match="non-empty sequence"):
+        format_list([])
+
+
+def test_format_list_raises_on_empty_tuple() -> None:
+    with pytest.raises(ValueError, match="non-empty sequence"):
+        format_list(())
