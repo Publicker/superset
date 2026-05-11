@@ -32,6 +32,7 @@ from superset.utils.core import (
     check_is_safe_zip,
     DateColumn,
     FilterOperator,
+    format_list,
     generic_find_constraint_name,
     generic_find_fk_constraint_name,
     get_datasource_full_name,
@@ -123,6 +124,27 @@ def test_remove_extra_adhoc_filters(
 ) -> None:
     remove_extra_adhoc_filters(original)
     assert expected == original
+
+
+def test_format_list_single_item():
+    assert format_list(["foo"]) == '"foo"'
+
+
+def test_format_list_multiple_items():
+    assert format_list(["foo", "bar"]) == '"foo", "bar"'
+
+
+def test_format_list_escapes_quote_character():
+    assert format_list(['he said "hi"']) == '"he said \\"hi\\""'
+
+
+def test_format_list_custom_separator_and_quote():
+    assert format_list(["a", "b"], sep=" | ", quote="'") == "'a' | 'b'"
+
+
+def test_format_list_empty_raises():
+    with pytest.raises(ValueError, match="non-empty"):
+        format_list([])
 
 
 def test_is_test():
