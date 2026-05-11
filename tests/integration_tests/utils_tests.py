@@ -408,6 +408,9 @@ class TestUtils(SupersetTestCase):
         assert cast_to_num(10.1) == 10.1
         assert cast_to_num(None) is None
         assert cast_to_num("this is not a string") is None
+        assert cast_to_num("") is None
+        assert cast_to_num("   ") is None
+        assert cast_to_num("\t\n ") is None
 
     def test_get_form_data_token(self):
         assert get_form_data_token({"token": "token_abcdefg1"}) == "token_abcdefg1"

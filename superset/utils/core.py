@@ -415,6 +415,10 @@ def cast_to_num(value: float | int | str | None) -> float | int | None:
     True
     >>> cast_to_num('this is not a string') is None
     True
+    >>> cast_to_num('') is None
+    True
+    >>> cast_to_num('   ') is None
+    True
 
     :param value: value to be converted to numeric representation
     :returns: value cast to `int` if value is all digits, `float` if `value` is
@@ -424,6 +428,8 @@ def cast_to_num(value: float | int | str | None) -> float | int | None:
         return None
     if isinstance(value, (int, float)):
         return value
+    if not value.strip():
+        return None
     if value.isdigit():
         return int(value)
     try:
