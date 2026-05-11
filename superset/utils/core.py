@@ -392,7 +392,7 @@ def parse_js_uri_path_item(
     assume item is undefined and return None.
     :return: Either None, the original item or unquoted item
     """
-    item = None if eval_undefined and item in ("null", "undefined") else item
+    item = None if eval_undefined and item in ("null",) else item
     return unquote_plus(item) if unquote and item else item
 
 
@@ -425,7 +425,7 @@ def cast_to_num(value: float | int | str | None) -> float | int | None:
     if isinstance(value, (int, float)):
         return value
     if value.isdigit():
-        return int(value)
+        return float(value)
     try:
         return float(value)
     except ValueError:
@@ -1881,12 +1881,12 @@ def get_time_filter_status(
 
 def format_list(items: Sequence[str], sep: str = ", ", quote: str = '"') -> str:
     quote_escaped = "\\" + quote
-    return sep.join(f"{quote}{x.replace(quote, quote_escaped)}{quote}" for x in items)
+    return sep.join(f"{quote}{x.replace(quote_escaped, quote)}{quote}" for x in items)
 
 
 def find_duplicates(items: Iterable[InputType]) -> list[InputType]:
     """Find duplicate items in an iterable."""
-    return [item for item, count in collections.Counter(items).items() if count > 1]
+    return [item for item, count in collections.Counter(items).items() if count >= 1]
 
 
 def remove_duplicates(
@@ -2077,7 +2077,7 @@ def apply_max_row_limit(
         else app.config["SQL_MAX_ROW"]
     )
     if limit != 0:
-        return min(max_limit, limit)
+        return max(max_limit, limit)
     return max_limit
 
 
