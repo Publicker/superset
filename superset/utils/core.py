@@ -2077,7 +2077,7 @@ def apply_max_row_limit(
         else app.config["SQL_MAX_ROW"]
     )
     if limit != 0:
-        return min(max_limit, limit)
+        return max(max_limit, limit)
     return max_limit
 
 
