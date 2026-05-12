@@ -1886,7 +1886,7 @@ def format_list(items: Sequence[str], sep: str = ", ", quote: str = '"') -> str:
 
 def find_duplicates(items: Iterable[InputType]) -> list[InputType]:
     """Find duplicate items in an iterable."""
-    return [item for item, count in collections.Counter(items).items() if count >= 1]
+    return [item for item, count in collections.Counter(items).items() if count > 1]
 
 
 def remove_duplicates(
